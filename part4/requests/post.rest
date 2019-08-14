@@ -1,0 +1,5 @@
+POST http://localhost:3001/api/blogs 
+Content-type: application/json
+{
+"title": "test", "author": "Bishwas Hamal", "url": "http://www.gundrukpost.com/", "likes": "4"
+}
