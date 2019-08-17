@@ -1,10 +1,10 @@
 
 // Load the full build.
-var _ = require('lodash');
+var _ = require('lodash')
 
 /**dummy returning 1 */
 const dummy = (blogs) => {
-  return 1;
+  return 1
 }
 /**totalLikes */
 const totalLikes = (blogs) => blogs.reduce((a, blog) => a + blog.likes, 0)
@@ -26,9 +26,9 @@ const mostBlogs = (blogs) => {
   blogs.forEach(obj => {
     authors.push(obj.author)
   })
-  var counts = {};
-  authors.forEach(function (x) { counts[x] = (counts[x] || 0) + 1; });
-  let person = _.max(Object.keys(counts), o => object[o]);
+  var counts = {}
+  authors.forEach(function (x) { counts[x] = (counts[x] || 0) + 1 })
+  let person = _.max(Object.keys(counts), o => object[o])
   let blogsNums = _.max(Object.values(counts))
 
   return thisFavBlog = {
@@ -51,7 +51,7 @@ const mostLikes = (blogs) => {
       likes: values.likes
     })
   })
-//console.log(tempObj)
+  //console.log(tempObj)
   var output =
     _(tempObj)
       .groupBy('author')
@@ -59,9 +59,9 @@ const mostLikes = (blogs) => {
         'author': key,
         'likes': _.sumBy(objs, 'likes')
       }))
-      .value();
+      .value()
       //console.log(output)
-  var maxLikAut = _.maxBy(output, 'likes');
+  var maxLikAut = _.maxBy(output, 'likes')
   resultObj = maxLikAut
   //console.log(resultObj)
   return resultObj

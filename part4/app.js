@@ -8,11 +8,12 @@ const mongoose = require('mongoose')
 
 console.log('commecting to', config.MONGODB_URI)
 
-mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true })
+mongoose
+  .connect(config.MONGODB_URI, { useNewUrlParser: true })
   .then(() => {
     console.log('connected to MongoDB')
   })
-  .catch((error) => {
+  .catch(error => {
     console.log('error connection to MongoDB:', error.message)
   })
 
