@@ -1,21 +1,26 @@
-const express = require("express");
-const blogsRouter = express.Router();
-const Blog = require("../models/blog");
+const express = require("express")
+const blogsRouter = express.Router()
+const Blog = require("../models/blog")
+const User = require('../models/user')
 
 /**get all posts */
 blogsRouter.get("/", async (request, response) => {
-  const blogs = await Blog.find({});
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
   response.json(blogs.map(blog => blog.toJSON()));
 });
 
 /**POST a new blog */
 blogsRouter.post("/", async (req, res, next) => {
   const body = req.body;
+  const user = await User.findById(body.user)
+ 
+
   const blog = new Blog({
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes
+    likes: body.likes,
+    user:user._id
   });
   if (!blog.title || !blog.author || !blog.url) {
     res.status(400).send("title, author, url fields are all required");
@@ -25,12 +30,16 @@ blogsRouter.post("/", async (req, res, next) => {
     res.send(`${body.likes} is not a number. Please supply a valid number`);
   }
   try {
+    
     const savedBlogs = await blog.save();
+    user.blogs = user.blogs.concat(savedBlogs._id)
+    await user.save()
+    //console.log(user.blogs)
     res.status(201).json(savedBlogs.toJSON());
   } catch (e) {
-    if (e.name === "CastError") {
+    if (e.name === "ValidationError") {
       console.log(e);
-      res.status(400).send(`Value for ${e.stringValue} is not correct`);
+      res.status(400).send("Value is not correct");
     } else {
       next(e);
     }
