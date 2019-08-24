@@ -1,9 +1,0 @@
-POST http://localhost:3003/api/blogs
-
-Content-type: application/json
-    {
-       "title":"Khem's Resume",
-       "author": "Khem Raj Neupane",
-       "url":"https://khemrajneupane.github.io/khemraj-resume/",
-       "likes":"333"
-    }

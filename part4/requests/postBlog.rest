@@ -1,0 +1,9 @@
+post http://localhost:3003/api/blogs HTTP/1.1
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1yIFVzZXIiLCJpZCI6IjVkNjEwYWE4N2E4ZTNjMzc4YzBlOTc3YiIsImlhdCI6MTU2NjY0MDg4MH0.gJXh0omLY95DA-LOe8nGpf0-DVobysELY1xoQhi312c
+
+{
+   "title":"About Myself",
+   "author":"Khem Raj Neupane",
+   "url":"https://khemrajneupane.github.io/khemraj-resume/"
+}
