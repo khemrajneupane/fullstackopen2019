@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/5d6136082c4473267c200d28
+Content-Type: application/json
+
+
+{
+   "title":"About Myself",
+   "author":"Khem Raj Neupane",
+   "url":"https://khemrajneupane.github.io/khemraj-resume/"
+}
