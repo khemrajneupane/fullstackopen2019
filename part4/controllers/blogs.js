@@ -6,7 +6,7 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const tokenExtractor = require('../utils/middleware')
 
-/**get all posts */
+/**get http://localhost:3003/api/blogs*/
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', {
     username: 1,
@@ -16,12 +16,10 @@ blogsRouter.get('/', async (request, response) => {
   response.json(blogs.map(blog => blog.toJSON()))
 })
 
-/**POST a new blog */
+/**POST http://localhost:3003/api/blogs/id */
 blogsRouter.post('/', async (req, res, next) => {
   const body = req.body
-  //const user = await User.findById(body.user)
   //console.log(user);
-
   if (!body.title || !body.author || !body.url) {
     res.status(400).send('title, author, url fields are all required')
   } else if (body.likes && isNaN(Number(body.likes))) {
@@ -33,7 +31,6 @@ blogsRouter.post('/', async (req, res, next) => {
       config.SECRET
     )
 
-    //console.log(decodedToken);
     if (!tokenExtractor.tokenExtractor(req) || !decodedToken.id) {
       res.status(400).send({ error: 'Incorrect username or password' })
       return
@@ -62,7 +59,7 @@ blogsRouter.post('/', async (req, res, next) => {
     }
   }
 })
-/**DELETE a post with by id, Ex-4.21*/
+/**DELETE http://localhost:3003/api/blogs/id*/
 
 blogsRouter.delete('/:id', async (req, res, next) => {
   try {
@@ -94,24 +91,27 @@ blogsRouter.delete('/:id', async (req, res, next) => {
   }
 })
 
-/**UPDATE a post by id, Ex-4.14*/
+/**UPDATE http://localhost:3003/api/blogs/id*/
 
 blogsRouter.put('/:id', async (req, res, next) => {
   const body = req.body
-  const updateBlog = {
-    title: body.title,
-    author: body.author,
-    url: body.url,
-    likes: body.likes
-  }
+
   if (!body.title || !body.url || !body.author) {
     res.status(400).json({ error: 'missing fields' })
-  } else if (!body.likes) {
-    updateBlog.likes = 0
-  } else if (isNaN(Number(body.likes))) {
+  } else if (body.likes && isNaN(Number(body.likes))) {
     res.status(400).json({ error: 'value of like should be a number' })
   } else {
     try {
+      const updateBlog = {
+        title: body.title,
+        author: body.author,
+        url: body.url,
+        likes: body.likes ? body.likes : 0
+      }
+      /*
+      if (!updateBlog.likes) {
+        updateBlog.likes = 0;
+      }*/
       await Blog.findByIdAndUpdate(req.params.id, updateBlog)
       res.status(201).send()
     } catch (e) {
