@@ -1,18 +1,45 @@
 import Blog from "./Blog";
 import React from "react";
-const UserBlogInfo = ({ info, username, blog }) => {
-  const filterUsers = info.filter(u => u.username === username);
-  const blogInfo = filterUsers.map(u =>
-    u.blogs.map(b => <p key={b.id}>{`${b.author} logged in`}</p>)
-  );
-
+import AddBlogsForm from "./AddBlogsForm";
+import LogOut from "./LogOut";
+const UserBlogInfo = ({
+  deleteList,
+  username,
+  blog,
+  onSubmit,
+  handleTitle,
+  handleAuthor,
+  handleUrl,
+  handleLikes,
+  likes,
+  url,
+  author,
+  title
+}) => {
   return (
     <div>
       blogs
-      {blogInfo}
+      <p>
+        {`${username} is logged in`} <LogOut />
+      </p>
       <div>
         {`All blogs `}
-        <Blog blog={blog} />
+        <Blog blog={blog} deleteList={deleteList} />
+      </div>
+      <p>add Blogs</p>
+      <div>
+        {" "}
+        <AddBlogsForm
+          onSubmit={onSubmit}
+          handleTitle={handleTitle}
+          handleAuthor={handleAuthor}
+          handleUrl={handleUrl}
+          handleLikes={handleLikes}
+          likes={likes}
+          url={url}
+          author={author}
+          title={title}
+        />
       </div>
     </div>
   );
