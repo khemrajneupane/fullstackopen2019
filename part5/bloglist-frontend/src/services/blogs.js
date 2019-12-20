@@ -5,25 +5,33 @@ let token = null;
 const setToken = newToken => {
   token = `bearer ${newToken}`;
 };
-const getAll = () => {
-  const request = axios.get(baseUrl);
-  return request.then(response => response.data);
+
+const getAll = async () => {
+  const request = await axios.get(baseUrl);
+  return request.data;
 };
-const create = async newObject => {
+
+const create = async (newObject, token) => {
   const config = {
-    headers: { Authorization: token }
+    headers: { Authorization: `bearer ${token}` }
   };
-
-  const response = await axios.post(baseUrl, newObject, config);
-  return response.data;
+  const request = await axios.post(baseUrl, newObject, config);
+  return request;
 };
+
 const deleteList = (blogId, token) => {
-  const request = axios.delete(`${baseUrl}/${blogId}`, {
-    headers: {
-      Authorization: `bearer ${token}`
-    }
-  });
-  return request; //.then(response => response.data);
+  const config = {
+    headers: { Authorization: `bearer ${token}` }
+  };
+  const request = axios.delete(`${baseUrl}/${blogId}`, config);
+  return request;
 };
 
-export default { getAll, create, setToken, deleteList };
+const updateLikes = async (blogId, blog) => {
+  const blogObj = { ...blog };
+  blogObj.likes++;
+  const request = await axios.put(`${baseUrl}/${blogId}`, blogObj);
+  return request.data;
+};
+
+export default { getAll, create, setToken, deleteList, updateLikes };

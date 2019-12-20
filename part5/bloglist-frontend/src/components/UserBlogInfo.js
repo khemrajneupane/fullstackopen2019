@@ -2,9 +2,12 @@ import Blog from "./Blog";
 import React from "react";
 import AddBlogsForm from "./AddBlogsForm";
 import LogOut from "./LogOut";
+import Togglable from "./Togglable";
+
 const UserBlogInfo = ({
   deleteList,
-  username,
+  setBlogs,
+  user,
   blog,
   onSubmit,
   handleTitle,
@@ -20,26 +23,30 @@ const UserBlogInfo = ({
     <div>
       blogs
       <p>
-        {`${username} is logged in`} <LogOut />
+        {`${user} is logged in`} <LogOut />
       </p>
       <div>
-        {`All blogs `}
-        <Blog blog={blog} deleteList={deleteList} />
+        <Togglable buttonLabel="ShowAllBlogs" label="HideAllBlogs">
+          {`All blogs `}
+          <Blog blog={blog} deleteList={deleteList} setBlogs={setBlogs} />
+        </Togglable>
       </div>
-      <p>add Blogs</p>
       <div>
         {" "}
-        <AddBlogsForm
-          onSubmit={onSubmit}
-          handleTitle={handleTitle}
-          handleAuthor={handleAuthor}
-          handleUrl={handleUrl}
-          handleLikes={handleLikes}
-          likes={likes}
-          url={url}
-          author={author}
-          title={title}
-        />
+        <Togglable buttonLabel="AddNewBlog" label="cancel">
+          <p>add Blogs</p>
+          <AddBlogsForm
+            onSubmit={onSubmit}
+            handleTitle={handleTitle}
+            handleAuthor={handleAuthor}
+            handleUrl={handleUrl}
+            handleLikes={handleLikes}
+            likes={likes}
+            url={url}
+            author={author}
+            title={title}
+          />
+        </Togglable>
       </div>
     </div>
   );

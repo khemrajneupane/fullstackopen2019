@@ -17,6 +17,7 @@ const App = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [likes, setLikes] = useState(0);
+
   const setNullMessage = () => {
     setTimeout(() => {
       setMessage(null);
@@ -32,8 +33,11 @@ const App = () => {
   };
 
   useEffect(() => {
-    blogService.getAll().then(initialBlogs => setBlogs(initialBlogs));
+    blogService.getAll().then(initialBlogs => {
+      setBlogs(initialBlogs);
+    });
   }, []);
+  blogs.sort((a, b) => b.likes - a.likes);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedUser");
@@ -43,7 +47,8 @@ const App = () => {
       blogService.setToken(user.token);
     }
   }, []);
-  //console.log(user);
+
+  /**All Handler functions*/
   const handleLogin = async event => {
     event.preventDefault();
     try {
@@ -56,9 +61,7 @@ const App = () => {
       setUser(user);
       setUsername(username);
       setPassword("");
-      //console.log(user.token)
     } catch (e) {
-      //console.log(e);
       setErrorMessage("Incorrect username or password");
       setNullMessage();
     }
@@ -74,9 +77,9 @@ const App = () => {
     setUrl(event.target.value);
   };
   const handleLikes = event => {
-    setLikes(event.target.value);
+    setLikes(Number(event.target.value));
   };
-  //console.log("username: ",username)
+
   const handleUsernameChange = event => {
     setUsername(event.target.value);
   };
@@ -84,16 +87,18 @@ const App = () => {
     setPassword(event.target.value);
   };
 
-  const addBlog = event => {
+  /**Adding a blog conditionally */
+  const addBlog = async event => {
     event.preventDefault();
 
     const newObject = {
       title,
       author,
       url,
-      likes
+      likes,
+      user
     };
-    console.log(blogs);
+
     const check = blogs.map(a => a.author.indexOf(newObject.author));
     const ifTrue = check.indexOf(0) > -1;
     if (!newObject.title || !newObject.author || !newObject.url) {
@@ -101,7 +106,7 @@ const App = () => {
       setNullMessage();
       setBlogs(blogs);
     } else if (ifTrue) {
-      const thisPerson = blogs.filter(
+      const thisPerson = await blogs.filter(
         blogs => !blogs.author.indexOf(newObject.author)
       )[0];
       setErrorMessage(
@@ -109,16 +114,13 @@ const App = () => {
       );
       setNullMessage();
     } else {
-      blogService
-        .create(newObject)
-
-        .then(req => setBlogs(blogs.concat(req)))
-        .catch(error => {
-          //setBlogs(blogs)
-          //console.log(error.message)
-          setErrorMessage(error.message);
-          setNullMessage();
-        });
+      try {
+        await blogService.create(newObject, user.token);
+      } catch (error) {
+        setErrorMessage(error.message);
+        setNullMessage();
+      }
+      setBlogs(blogs.concat(newObject));
       setMessage(`a new blog ${newObject.title} by ${newObject.author} added `);
       setNullMessage();
       setTitle("");
@@ -128,28 +130,27 @@ const App = () => {
     }
   };
 
-  const deleteList = blog => {
-    const { id, author } = blog;
+  /**Delete Function */
+  const deleteList = async (item, setItemObj) => {
+    const { id, author } = item;
     let r = window.confirm(`delete ${author} ?`);
     if (r === true) {
-      //console.log(user.token);
-      blogService
-        .deleteList(id, user.token)
-        .then(request => {
-          setMessage(
-            `Information of ${author} has been removed from the server.`
-          );
-          setNullMessage();
-        })
-        .catch(error => {
-          //console.log(error.message);
-          setBlogs(blogs);
-          setErrorMessage(
-            `You have no permission to delete ${author} from the server.
-            You cannot delete others blogs!`
-          );
-          setNullMessage();
-        });
+      try {
+        await blogService.deleteList(id, user.token);
+        setMessage(
+          `Information of ${author} has been removed from the server.`
+        );
+        setNullMessage();
+        setItemObj({});
+      } catch (error) {
+        setBlogs(blogs);
+        setErrorMessage(
+          `You have no permission to delete ${author} from the server.
+            Please refresh the page and try again!`
+        );
+        setNullMessage();
+      }
+
       setBlogs(blogs.filter(blog => blog.id !== id));
       setMessage(`${author}'s entry has been erased`);
       setNullMessage();
@@ -175,8 +176,8 @@ const App = () => {
       ) : (
         <UserBlogInfo
           username={username}
+          user={user.username}
           blog={blogs}
-          blogs={blogs}
           onSubmit={addBlog}
           handleTitle={handleTitle}
           handleAuthor={handleAuthor}
@@ -187,6 +188,7 @@ const App = () => {
           likes={likes}
           title={title}
           deleteList={deleteList}
+          setBlogs={setBlogs}
         />
       )}
     </div>
