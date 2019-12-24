@@ -4,31 +4,17 @@ import AddBlogsForm from './AddBlogsForm'
 import LogOut from './LogOut'
 import Togglable from './Togglable'
 
-const UserBlogInfo = ({
-    deleteList,
-    setBlogs,
-    user,
-    blog,
-    onSubmit,
-    handleTitle,
-    handleAuthor,
-    handleUrl,
-    handleLikes,
-    likes,
-    url,
-    author,
-    title
-}) => {
+const UserBlogInfo = (props) => { 
     return (
         <div>
       blogs
             <p>
-                {`${user} is logged in`} <LogOut />
+                {`${props.user} is logged in`} <LogOut />
             </p>
             <div>
                 <Togglable buttonLabel="ShowAllBlogs" label="HideAllBlogs">
                     {'All blogs '}
-                    <Blog blog={blog} deleteList={deleteList} setBlogs={setBlogs} />
+                    <Blog blogs={props.blogs} deleteList={props.deleteList}  user={props.user}/>
                 </Togglable>
             </div>
             <div>
@@ -36,15 +22,15 @@ const UserBlogInfo = ({
                 <Togglable buttonLabel="AddNewBlog" label="cancel">
                     <p>add Blogs</p>
                     <AddBlogsForm
-                        onSubmit={onSubmit}
-                        handleTitle={handleTitle}
-                        handleAuthor={handleAuthor}
-                        handleUrl={handleUrl}
-                        handleLikes={handleLikes}
-                        likes={likes}
-                        url={url}
-                        author={author}
-                        title={title}
+                        onSubmit={props.onSubmit}
+                        handleTitle={props.handleTitle}
+                        handleAuthor={props.handleAuthor}
+                        handleUrl={props.handleUrl}
+                        handleLikes={props.handleLikes}
+                        likes={props.likes}
+                        url={props.url}
+                        author={props.author}
+                        title={props.title}
                     />
                 </Togglable>
             </div>

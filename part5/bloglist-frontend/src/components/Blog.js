@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import '../index.css'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, deleteList, setBlogs }) => {
+const Blog = (props) => {
     const [itemObj, setItemObj] = useState([])
     const [visible, setVisible] = useState(false)
 
@@ -13,9 +13,6 @@ const Blog = ({ blog, deleteList, setBlogs }) => {
     const toggleVisibility = () => {
         setVisible(!visible)
     }
-    useEffect(() => {
-        blogService.getAll().then(initialBlogs => setBlogs(initialBlogs))
-    }, [setBlogs])
 
     const addLikes = async blog => {
         try {
@@ -34,20 +31,19 @@ const Blog = ({ blog, deleteList, setBlogs }) => {
             author: item.author,
             url: item.url,
             likes: item.likes,
+            user:item.user,
             id: item.id
         })
 
-    const itemsTitleAuthor = blog.map(item => {
-        const thisUser = window.localStorage.getItem('loggedUser')
-        const thisUserName = JSON.parse(thisUser).username
-        const isLogged = item.user.username.indexOf(thisUserName) > -1
-
+    const itemsTitleAuthor = props.blogs.map(item => {
+       const isLogged = item.user.username.indexOf(props.user) > -1
         return (
-            <div key={item.title} className="blogStyle">
+            <div key={item.title} className="blogStyle" data-testid="visible">
                 <span
-                    style={hideWhenVisible}
+                    style={hideWhenVisible} 
                     onClick={toggleVisibility}
                     className="ptr"
+                    data-testid="itemtitle"
                 >
                     {item.title}
                 </span>
@@ -55,10 +51,11 @@ const Blog = ({ blog, deleteList, setBlogs }) => {
                     key={item.id}
                     onClick={() => createEachItems(item)}
                     className="ptr"
+                    data-testid="createItems"
                 >
                     {item.author}
                     {isLogged ? (
-                        <button onClick={() => deleteList(item, setItemObj)}>remove</button>
+                        <button onClick={() => props.deleteList(item, setItemObj)}>remove</button>
                     ) : (
                         <button className="hide"></button>
                     )}
@@ -68,13 +65,15 @@ const Blog = ({ blog, deleteList, setBlogs }) => {
     })
     const eachItems = () =>
         itemObj.title === undefined ? (
-            <div className="hide"></div>
+            <div className="hide" data-testid="invisible"></div>
         ) : (
-            <div className="eachBlogStyle">
+            <div className="eachBlogStyle"  data-testid="revisible">
                 <span
                     style={showWhenVisible}
                     onClick={toggleVisibility}
                     className="ptr"
+                    data-testid="spanvisible"
+                    
                 >
                     {itemObj.title}
                 </span>
@@ -88,16 +87,17 @@ const Blog = ({ blog, deleteList, setBlogs }) => {
         )
     return (
         <div>
-            {eachItems()}
+            <div data-testid="eachitems" >{eachItems()}</div>
+            
             {itemsTitleAuthor}
         </div>
     )
 }
 
 Blog.propTypes = {
-    blog: PropTypes.array.isRequired,
+    blogs: PropTypes.array.isRequired,
     deleteList: PropTypes.func.isRequired,
-    setBlogs: PropTypes.func.isRequired
+    user:PropTypes.string.isRequired
 }
 
 export default Blog

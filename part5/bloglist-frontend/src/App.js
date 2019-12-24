@@ -17,7 +17,7 @@ const App = () => {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [likes, setLikes] = useState(0)
-
+  
     const setNullMessage = () => {
         setTimeout(() => {
             setMessage(null)
@@ -36,7 +36,7 @@ const App = () => {
         blogService.getAll().then(initialBlogs => {
             setBlogs(initialBlogs)
         })
-    }, [])
+    }, [setBlogs])
     blogs.sort((a, b) => b.likes - a.likes)
 
     useEffect(() => {
@@ -69,6 +69,7 @@ const App = () => {
 
     const handleTitle = event => {
         setTitle(event.target.value)
+        
     }
     const handleAuthor = event => {
         setAuthor(event.target.value)
@@ -175,21 +176,20 @@ const App = () => {
                 />
             ) : (
                 <UserBlogInfo
-                    username={username}
+                    deleteList={deleteList}
                     user={user.username}
-                    blog={blogs}
+                    blogs={blogs}
                     onSubmit={addBlog}
                     handleTitle={handleTitle}
                     handleAuthor={handleAuthor}
                     handleUrl={handleUrl}
                     handleLikes={handleLikes}
+                    likes={likes}
                     url={url}
                     author={author}
-                    likes={likes}
                     title={title}
-                    deleteList={deleteList}
-                    setBlogs={setBlogs}
                 />
+ 
             )}
         </div>
     )

@@ -10,27 +10,21 @@ const Button = ({ type, text }) => {
     return <button type={type}>{text}</button>
 }
 
-const LoginForm = ({
-    onSubmit,
-    handleUsernameChange,
-    handlePasswordChange,
-    username,
-    password
-}) => {
+const LoginForm = (props) => {
     return (
         <div>
-            <p>Login to application</p>
+            <p data-testid="login" >Login to application</p>
 
-            <form onSubmit={onSubmit}>
+            <form onSubmit={props.onSubmit}>
                 <Input
                     text="username"
-                    inputValue={username}
-                    handler={handleUsernameChange}
+                    inputValue={props.username}
+                    handler={props.handleUsernameChange}
                 />
                 <Input
                     text="password"
-                    inputValue={password}
-                    handler={handlePasswordChange}
+                    inputValue={props.password}
+                    handler={props.handlePasswordChange}
                 />
                 <Button type="submit" text="submit" />
             </form>
