@@ -41,8 +41,8 @@ test("Verify that when the blog post is clicked, the other information of the bl
         fireEvent.click(component.getByTestId("createItems"));
         expect(component.getByTestId("revisible")).toBeVisible();
 
-        fireEvent.click(component.getByTestId("itemtitle"));
-        expect(component.getByTestId("spanvisible")).toBeVisible();
+        fireEvent.click(component.getByTestId("spanvisible"));
+        expect(component.container.querySelector(".ptr")).toHaveTextContent("MyTitle");
 
         fireEvent.click(component.getByTestId("spanvisible"));
         expect(component.getByTestId("visible")).toBeVisible();

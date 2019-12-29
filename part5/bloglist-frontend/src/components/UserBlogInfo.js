@@ -6,7 +6,7 @@ import Togglable from './Togglable'
 
 const UserBlogInfo = (props) => { 
     return (
-        <div>
+        <div className="userbloginfo">
       blogs
             <p>
                 {`${props.user} is logged in`} <LogOut />
@@ -27,10 +27,6 @@ const UserBlogInfo = (props) => {
                         handleAuthor={props.handleAuthor}
                         handleUrl={props.handleUrl}
                         handleLikes={props.handleLikes}
-                        likes={props.likes}
-                        url={props.url}
-                        author={props.author}
-                        title={props.title}
                     />
                 </Togglable>
             </div>

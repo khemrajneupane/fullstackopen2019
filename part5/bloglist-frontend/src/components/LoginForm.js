@@ -1,32 +1,32 @@
 import React from 'react'
-export const Input = ({ text, inputValue, handler }) => {
-    return (
-        <div>
-            {text}: <input value={inputValue} onChange={handler} />
-        </div>
-    )
-}
-const Button = ({ type, text }) => {
-    return <button type={type}>{text}</button>
-}
+import {useField} from '../hooks/index'
 
-const LoginForm = (props) => {
+export const Button = ({ type, text,onClick }) => <button type={type} onClick={onClick}>{text}</button>
+
+const LoginForm = ({onSubmit}) => {
+    const usernameValue = useField("username");
+    const passwordValue = useField("password");
+
+    const handleSubmit = e => {
+        e.preventDefault()
+        onSubmit({
+          username: usernameValue.value,
+          password: passwordValue.value
+        })
+      }    
+  
     return (
         <div>
             <p data-testid="login" >Login to application</p>
 
-            <form onSubmit={props.onSubmit}>
-                <Input
-                    text="username"
-                    inputValue={props.username}
-                    handler={props.handleUsernameChange}
-                />
-                <Input
-                    text="password"
-                    inputValue={props.password}
-                    handler={props.handlePasswordChange}
-                />
-                <Button type="submit" text="submit" />
+            <form onSubmit={handleSubmit}>
+                <label htmlFor="username">Username</label>
+                <input {...usernameValue} reset="" />
+                <br />
+                <label htmlFor="password">Password</label>
+                <input {...passwordValue} reset="" />
+                <br />
+                <Button type="submit" text="Login"/>
             </form>
         </div>
     )

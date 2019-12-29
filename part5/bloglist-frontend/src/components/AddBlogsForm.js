@@ -1,14 +1,8 @@
 import React from 'react'
-export const Input = ({ text, inputValue, handler }) => {
-    return (
-        <div>
-            {text}: <input value={inputValue} onChange={handler} />
-        </div>
-    )
-}
-const Button = ({ type, text }) => {
-    return <button type={type}>{text}</button>
-}
+import {Button} from '../components/LoginForm'
+
+export const Input = ({ text, inputValue, handler,type }) => <div>{text}: <input value={inputValue} onChange={handler} type={type}/></div> 
+        
 
 const AddBlogsForm = ({
     onSubmit,
@@ -16,28 +10,25 @@ const AddBlogsForm = ({
     handleAuthor,
     handleUrl,
     handleLikes,
-    likes,
-    url,
-    author,
-    title
+
 }) => {
     return (
         <div>
-            <form onSubmit={onSubmit}>
+ {           <form onSubmit={onSubmit}>
                 <div>
-                    <Input text="title" inputValue={title} handler={handleTitle} />
+                    <Input text="title" value="title" handler={handleTitle} />
                 </div>
                 <div>
-                    <Input text="author" inputValue={author} handler={handleAuthor} />
+                    <Input text="author" value="author" handler={handleAuthor} />
                 </div>
                 <div>
-                    <Input text="url" inputValue={url} handler={handleUrl} />
+                    <Input text="url" value="url" type ="url" handler={handleUrl} />
                 </div>
                 <div>
-                    <Input text="likes" inputValue={likes} handler={handleLikes} />
+                    <Input text="likes" type="number" value="likes" handler={handleLikes} />
                 </div>
-                <Button type="submit" text="create" />
-            </form>
+                <Button type="submit" text="Create" />
+            </form>}
         </div>
     )
 }
