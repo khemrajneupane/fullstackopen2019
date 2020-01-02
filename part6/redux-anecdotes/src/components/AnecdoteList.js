@@ -1,37 +1,31 @@
 import React from "react";
 import { addVote } from "../reducers/anecdoteReducer";
 import { setNotificationMsg } from "../reducers/notificationReducer";
+import { connect } from "react-redux";
 
 const AnecdoteList = props => {
   const voteWithNotice = (id, content) => {
-    props.store.dispatch(setNotificationMsg(`you voted '${content}'`));
-    props.store.dispatch(addVote(id));
+    props.setNotificationMsg(`you voted '${content}'`);
+    props.addVote(id);
     setTimeout(() => {
-      props.store.dispatch(setNotificationMsg(null));
+      props.setNotificationMsg(null);
     }, 5000);
   };
-  /**Filtering logic */
-  const { anecdote, filter } = props.store.getState();
-
-  let filtered;
-  filter
-    ? (filtered = anecdote.filter(f => f.content.includes(filter)))
-    : (filtered = anecdote);
 
   return (
     <div>
       <h2>Anecdotes</h2>
-      {filtered
+      {props.filterAnecdote
         .sort((a, b) => b.votes - a.votes)
-        .map(anecdote => (
-          <div key={anecdote.id}>
-            <div>{anecdote.content}</div>
+        .map(anec => (
+          <div key={anec.id}>
+            <div>{anec.content}</div>
             <div>
-              has {anecdote.votes}
+              has {anec.votes}
               <button
                 onClick={e => {
                   e.preventDefault();
-                  voteWithNotice(anecdote.id, anecdote.content);
+                  voteWithNotice(anec.id, anec.content);
                 }}
               >
                 vote
@@ -42,4 +36,24 @@ const AnecdoteList = props => {
     </div>
   );
 };
-export default AnecdoteList;
+
+/**Filtering logic */
+const filterAnecdote = state => {
+  if (!state.filter) {
+    return state.anecdote;
+  } else {
+    return state.anecdote.filter(a => a.content.includes(state.filter));
+  }
+};
+
+const mapDispatchToProps = {
+  addVote,
+  setNotificationMsg
+};
+const mapStateToProps = state => {
+  return {
+    filterAnecdote: filterAnecdote(state)
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AnecdoteList);

@@ -1,3 +1,10 @@
+export const createFilter = filter => {
+  return {
+    type: "CREATE_FILTER",
+    filter
+  };
+};
+
 const filterReducer = (state = "", action) => {
   switch (action.type) {
     case "CREATE_FILTER":
@@ -5,13 +12,6 @@ const filterReducer = (state = "", action) => {
     default:
       return state;
   }
-};
-
-export const createFilter = filter => {
-  return {
-    type: "CREATE_FILTER",
-    filter
-  };
 };
 
 export default filterReducer;
