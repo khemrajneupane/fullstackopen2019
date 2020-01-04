@@ -7,8 +7,8 @@ const Filter = props => {
   const handleChange = event => {
     event.target.value
       ? props.setNotificationMsg(
-          `you are filtering with ${event.target.value} `
-        )
+        `you are filtering with ${event.target.value} `
+      )
       : props.setNotificationMsg(null);
     props.createFilter(event.target.value);
     setTimeout(() => {
@@ -31,13 +31,4 @@ const mapDispatchToProps = {
   setNotificationMsg
 };
 export default connect(null, mapDispatchToProps)(Filter);
-/*
-const mapStateToProps = state => {
-  // sometimes it is useful to console log from mapStateToProps
-  console.log(state);
-  return {
-    filtered: filtered(state),
-    filter: state.filter
-  };
-};
-*/
+
