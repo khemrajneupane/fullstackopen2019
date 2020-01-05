@@ -11,7 +11,9 @@ export const setNotificationMsg = (message, time) => {
     }, time * 1000);
   };
 };
-const notificationReducer = (state = "default message", action) => {
+
+
+const notificationReducer = (state = "", action) => {
   switch (action.type) {
     case "NOTIFICATION_MSG":
       return action.message;

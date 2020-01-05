@@ -5,15 +5,13 @@ import { connect } from "react-redux";
 
 const Filter = props => {
   const handleChange = event => {
-    event.target.value
-      ? props.setNotificationMsg(
-        `you are filtering with ${event.target.value} `
-      )
-      : props.setNotificationMsg(null);
     props.createFilter(event.target.value);
-    setTimeout(() => {
-      props.setNotificationMsg(null);
-    }, 5000);
+    if(event.target.value){
+      props.setNotificationMsg(
+        `you are filtering with ${event.target.value} `,4)
+    }else{props.setNotificationMsg(0)}
+
+    
   };
   const style = {
     marginBottom: 10,

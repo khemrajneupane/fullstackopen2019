@@ -8,13 +8,8 @@ const AnecdoteForm = props => {
     e.preventDefault();
     const content = e.target.contents.value;
     e.target.contents.value = "";
-    //const newAnecdote = await anecdoteService.createNew(content)
     props.newAnecdotes(content);
-    props.setNotificationMsg(`you created ${content}`, 5);
-
-    setTimeout(() => {
-      props.setNotificationMsg(null);
-    }, 5000);
+    props.setNotificationMsg(`you created ${content}`, 4);
   };
 
   return (

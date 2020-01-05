@@ -13,17 +13,17 @@ const createNew = async content => {
   return response.data;
 };
 
-const addVoteByOne = async id => {
-  let existingVotes = await axios.get(`${baseUrl}/${id}`);
-
-  const modifiedVotes = {
-    ...existingVotes.data,
-    votes: existingVotes.data.votes + 1
-  };
-  const response = await axios.put(`${baseUrl}/${id}`, {
-    modifiedVotes
-  });
-  return response;
+const getOneById = async (anecdoteId) => {
+  const responses = await axios.get(`${baseUrl}/${anecdoteId}`);
+  return responses.data;
 };
 
-export default { getAll, createNew, addVoteByOne };
+const addVoteByOne = async (anecdoteId, anecdote) => {
+  const anecObj = { ...anecdote }
+  anecObj.votes++
+  const request = await axios.put(`${baseUrl}/${anecdoteId}`, anecObj)
+  return request.data
+}
+
+
+export default { getAll, createNew, addVoteByOne,getOneById };

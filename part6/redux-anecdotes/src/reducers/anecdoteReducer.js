@@ -1,12 +1,12 @@
 import anecdoteService from "../../src/services/anecdotes";
 
-export const addVote = id => {
+export const addVote = (id) => {
   return async dispatch => {
-    const addVoteReducer = await anecdoteService.createNew(id);
-    console.log("addVoteReducer ", addVoteReducer);
+    const anecdoteToChange = await anecdoteService.getOneById(id)
+    await anecdoteService.addVoteByOne(id, anecdoteToChange);
+
     dispatch({
       type: "ADD_VOTE_BY_ONE",
-
       payload: { id }
     });
   };
@@ -40,9 +40,7 @@ const reducer = (state = [], action) => {
         anec.id !== action.payload.id ? anec : voted
       );
 
-      console.log("results frp, reducer ", result);
       return result;
-
     case "NEW_ANECDOTE":
       return [...state, action.contents];
     case "INIT_ANECDOTES":

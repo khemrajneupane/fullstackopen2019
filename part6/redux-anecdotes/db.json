@@ -31,9 +31,24 @@
       "votes": 0
     },
     {
-      "content": "Test 1",
-      "votes": 0,
-      "id": "k80TnTe"
+      "content": "Test Anecdote 1",
+      "votes": 1,
+      "id": "Owy27lK"
+    },
+    {
+      "content": "Test Anecdote 2",
+      "votes": 2,
+      "id": "G-ulkX2"
+    },
+    {
+      "content": "Khem Anecdote 3",
+      "votes": 3,
+      "id": "CPa_HJ9"
+    },
+    {
+      "content": "I believe that without love and laughter there is no joy.",
+      "votes": 70,
+      "id": "W08_IBw"
     }
   ]
 }

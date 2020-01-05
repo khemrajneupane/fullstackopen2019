@@ -6,10 +6,7 @@ import { connect } from "react-redux";
 const AnecdoteList = props => {
   const voteWithNotice = (id, content) => {
     props.addVote(id);
-    props.setNotificationMsg(`you voted '${content}'`, 5);
-    setTimeout(() => {
-      props.setNotificationMsg(null);
-    }, 5000);
+    props.setNotificationMsg(`you voted '${content}'`, 4);
   };
 
   return (
@@ -52,7 +49,9 @@ const mapDispatchToProps = {
 };
 const mapStateToProps = state => {
   return {
-    filterAnecdote: filterAnecdote(state)
+    filterAnecdote: filterAnecdote(state),
+    anecdotes: state.anecdotes,
+    notification: state.notification
   };
 };
 
